@@ -5,14 +5,21 @@ module RN
         desc 'Create a book'
 
         argument :name, required: true, desc: 'Name of the book'
-
+        option :subtitulo, required: true, desc: 'Name of the book'
+        
         example [
           '"My book" # Creates a new book named "My book"',
           'Memoires  # Creates a new book named "Memoires"'
         ]
 
-        def call(name:, **)
-          warn "TODO: Implementar creación del cuaderno de notas con nombre '#{name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+        def call(name:, **opciones)
+          path = File.join(Dir.home,".my_rns",name)
+          if Dir.exist? path
+            puts "There is already a book with the name #{name}"
+          else
+            Dir.mkdir(path)
+            puts "The new book #{name} has been created under #{File.join(Dir.home, ".my_rns", name)}"
+          end
         end
       end
 
@@ -30,7 +37,23 @@ module RN
 
         def call(name: nil, **options)
           global = options[:global]
-          warn "TODO: Implementar borrado del cuaderno de notas con nombre '#{name}' (global=#{global}).\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          if (name.nil? && !global)
+            puts "No book will be deleted."
+          end
+          path = File.join(Dir.home,".my_rns")
+          if (not name.nil?)
+            dir_to_delete = File.join(path,name)
+            if(Dir.exist?(dir_to_delete))
+              Dir.each_child(dir_to_delete) {|x| File.delete(File.join(dir_to_delete,x)) }
+              Dir.rmdir(dir_to_delete)
+            else
+              puts "The Book #{name} does not exists"
+            end
+          else
+            if Dir.exist? File.join(path,"global")
+              Dir.each_child(File.join(path,"global")) {|x| puts x;File.delete(x) }
+            end
+          end
         end
       end
 
@@ -42,7 +65,9 @@ module RN
         ]
 
         def call(*)
-          warn "TODO: Implementar listado de los cuadernos de notas.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          Dir.entries(directory).select { |file| File.directory?(File.join(directory, file)) }
+          path = File.join(Dir.home,".my_rns/*")
+          puts Dir.glob(path)
         end
       end
 
@@ -59,7 +84,13 @@ module RN
         ]
 
         def call(old_name:, new_name:, **)
-          warn "TODO: Implementar renombrado del cuaderno de notas con nombre '#{old_name}' para que pase a llamarse '#{new_name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          path = File.join(Dir.home,".my_rns/")
+          if Dir.exist? File.join(path,old_name)
+            puts "Book #{old_name} will be renamed to #{new_name}"
+            File.rename(File.join(path,old_name),File.join(path,new_name))
+          else
+            puts "A book named #{old_name} doesn't exists"
+          end
         end
       end
     end
