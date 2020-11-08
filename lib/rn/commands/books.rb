@@ -1,6 +1,7 @@
 module RN
   module Commands
     module Books
+      require 'rn/validator'
       class Create < Dry::CLI::Command
         desc 'Create a book'
 
@@ -13,8 +14,9 @@ module RN
         ]
 
         def call(name:, **opciones)
+          Validator::new.validate_folder_name(name)
           path = File.join(Dir.home,".my_rns",name)
-          if Dir.exist? path
+          if Validator::new.book_exists?(path)
             puts "There is already a book with the name #{name}"
           else
             Dir.mkdir(path)
@@ -39,19 +41,22 @@ module RN
           global = options[:global]
           if (name.nil? && !global)
             puts "No book will be deleted."
+            exit 1
           end
-          path = File.join(Dir.home,".my_rns")
+
           if (not name.nil?)
-            dir_to_delete = File.join(path,name)
-            if(Dir.exist?(dir_to_delete))
+            dir_to_delete = Validator::new.get_path(name)
+            if (Validator::new.book_exists?(dir_to_delete))
               Dir.each_child(dir_to_delete) {|x| File.delete(File.join(dir_to_delete,x)) }
               Dir.rmdir(dir_to_delete)
+              puts "'#{name}' book succesfully deleted."
             else
-              puts "The Book #{name} does not exists"
+              puts "The Book '#{name}' does not exists."
             end
           else
-            if Dir.exist? File.join(path,"global")
+            if Dir.exist? Validator::new.get_path("global")
               Dir.each_child(File.join(path,"global")) {|x| puts x;File.delete(x) }
+              puts "'global' book succesfully deleted."
             end
           end
         end
@@ -65,9 +70,10 @@ module RN
         ]
 
         def call(*)
-          Dir.entries(directory).select { |file| File.directory?(File.join(directory, file)) }
-          path = File.join(Dir.home,".my_rns/*")
-          puts Dir.glob(path)
+          
+          path = File.join(Dir.home,".my_rns","/*") 
+          dirs =  Dir[path].select { |entry| File.directory?(entry) }
+          dirs.each { |name| puts File.basename(name)}
         end
       end
 
@@ -84,12 +90,20 @@ module RN
         ]
 
         def call(old_name:, new_name:, **)
-          path = File.join(Dir.home,".my_rns/")
-          if Dir.exist? File.join(path,old_name)
-            puts "Book #{old_name} will be renamed to #{new_name}"
-            File.rename(File.join(path,old_name),File.join(path,new_name))
-          else
-            puts "A book named #{old_name} doesn't exists"
+          old_path = Validator::new.get_path(old_name)
+          new_path = Validator::new.get_path(new_name)
+          if Validator::new.validate_folder_name(old_name) and Validator::new.validate_folder_name(new_name)
+            if Validator::new.book_exists?(old_path) 
+              if !Validator::new.book_exists?(new_path)
+                File.rename(old_path, new_path)
+              else
+                warn "A book named '#{new_name}' already exists."
+                exit 1
+              end
+            else
+              warn "A book named '#{old_name}' does not exists."
+              exit 1
+            end
           end
         end
       end

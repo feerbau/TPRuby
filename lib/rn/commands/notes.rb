@@ -156,11 +156,12 @@ module RN
             if !Validator::new.note_exists?(new_path)
               File.rename(old_path, new_path)
             else
-              warn "There is already a not named '#{new_title}' inside '#{book}'"
+              warn "There is already a note named '#{new_title}' inside '#{book}'"
+              exit 1
             end
           else
-            warn "There is no note called '#{old_title}' inside '#{book}' bok"
-            exit
+            warn "There is no note called '#{old_title}' inside '#{book}' book"
+            exit 1
           end
           puts "Note has been renamed from #{old_title} to #{new_title}"
           
@@ -206,7 +207,7 @@ module RN
 
         def list_notes(path, message)
           puts message
-          Dir[path].map { |a| puts File.basename(a)}
+          Dir[path].each { |a| puts File.basename(a)}
         end
       end
 
