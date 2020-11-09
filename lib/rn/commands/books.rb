@@ -41,7 +41,7 @@ module RN
           global = options[:global]
           if (name.nil? && !global)
             puts "No book will be deleted."
-            exit 1
+            
           end
 
           if (not name.nil?)
@@ -97,12 +97,12 @@ module RN
               if !Validator::new.book_exists?(new_path)
                 File.rename(old_path, new_path)
               else
-                warn "A book named '#{new_name}' already exists."
-                exit 1
+                abort "A book named '#{new_name}' already exists."
+                
               end
             else
-              warn "A book named '#{old_name}' does not exists."
-              exit 1
+              abort "A book named '#{old_name}' does not exists."
+              
             end
           end
         end

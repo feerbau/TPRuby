@@ -27,14 +27,14 @@ module RN
             path = File.join(Dir.home,".my_rns",book,"/")
             
             if !Validator::new.book_exists?(path)
-              warn "The book '#{book}' does not exists."
-              exit 1
+              abort "The book '#{book}' does not exists."
+              
             end
           end
 
           if Validator::new.note_exists?(path+title)
-            warn "There is already a note named #{title} in '#{book}' book."
-            exit 1
+            abort "There is already a note named #{title} in '#{book}' book."
+            
           end
           File.new(path+title, "w")
         end
@@ -63,20 +63,20 @@ module RN
           path = File.join(Dir.home, ".my_rns", book)
 
           if !Validator::new.book_exists?(path)
-            warn "The book '#{book}' does not exists."
-            exit 1
+            abort "The book '#{book}' does not exists."
+            
           end
 
           if !Validator::new.note_exists?(File.join(path,title)) 
-            warn "There is no note called '#{title}' inside '#{book}' book"
-            exit
+            abort "There is no note called '#{title}' inside '#{book}' book"
+            
           end
           
           puts "Are you sure you want to delete the note '#{title}' inside '#{book}' book? Type in 'y' to confirm."
           confirmation = STDIN.gets.chomp
           if confirmation != 'y'
-            warn "Canceling delete of the note."
-            exit 1
+            abort "Canceling delete of the note."
+            
           end
           File.delete(File.join(path,title))
           puts "The note '#{title}' has been deleted from '#{book}'"
@@ -108,16 +108,16 @@ module RN
             path = File.join(Dir.home,".my_rns",book,"/")
             
             if !Validator::new.book_exists?(path)
-              warn "The book '#{book}' does not exists."
-              exit 1
+              abort "The book '#{book}' does not exists."
+              
             end
 
             path = File.join(Dir.home,".my_rns",book,title)
           end
 
           if !Validator::new.note_exists?(path)
-            warn "There is no note named '#{title}' in '#{book}' book."
-            exit 1
+            abort "There is no note named '#{title}' in '#{book}' book."
+            
           end
 
           editor = TTY::Editor.new(prompt: "Which one do you fancy?")
@@ -156,12 +156,12 @@ module RN
             if !Validator::new.note_exists?(new_path)
               File.rename(old_path, new_path)
             else
-              warn "There is already a note named '#{new_title}' inside '#{book}'"
-              exit 1
+              abort "There is already a note named '#{new_title}' inside '#{book}'"
+              
             end
           else
-            warn "There is no note called '#{old_title}' inside '#{book}' book"
-            exit 1
+            abort "There is no note called '#{old_title}' inside '#{book}' book"
+            
           end
           puts "Note has been renamed from #{old_title} to #{new_title}"
           
@@ -189,8 +189,8 @@ module RN
           message = temp % {a:"every book"}
           if !book.nil? and !book.empty? and Validator::new.validate_folder_name(book)
             if !Validator::new.book_exists?(File.join(Dir.home,'.my_rns',book))
-              warn "That book does not exists."
-              exit 1
+              abort "That book does not exists."
+              
             end
             path = File.join(Dir.home,".my_rns",book,"*.rn")
             message = temp % {a:"book '#{book}'"}
@@ -244,8 +244,8 @@ module RN
               puts "The note '#{title}' is empty."
             end
           else
-            warn "That note does not exists."
-            exit 1
+            abort "That note does not exists."
+            
           end
         end
       end
