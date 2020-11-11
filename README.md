@@ -12,6 +12,19 @@ intenta proveer un punto de partida para el desarrollo, simplificando el _bootst
 proyecto que puede ser una tarea que consume mucho tiempo y conlleva la toma de algunas
 decisiones que pueden tener efectos tanto positivos como negativos en el proyecto.
 
+
+## Decisiones de diseño
+
+Para el desarrollo de la aplicacion "Ruby Notes" se tuvieron en cuenta estos criterios de diseño.
+
+- Al momento de querer crear notas en cuadernos inexistentes, en vez de crear el cuaderno con la nueva nota se termina el programa indicando el problema.
+
+- La edicion de una nota, para mayor flexibilidad y comodidad se decidió utilizar "tty-editor", esto permite al usuario elegir entre los editores de texto que posea para ver/editar las notas.
+
+- Se utilizó una clase validadora para validar distintas al momento de interactuar tanto con las notas como con los cuadernos.
+
+- Para el renombre o creacion de una nota con un nombre existente dentro del cuaderno en la que se cree o renombre, se le advertira al usuario de que ya existe una nota con ese nombre. No dejandole sobrescribir dicha nota.
+
 ## Uso de `rn`
 
 Para ejecutar el comando principal de la herramienta se utiliza el script `bin/rn`, el cual
