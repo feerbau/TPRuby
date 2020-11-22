@@ -245,7 +245,6 @@ module RN
             end
           else
             abort "That note does not exists."
-            
           end
         end
       end

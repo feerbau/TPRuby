@@ -20,7 +20,6 @@ class Validator
     def validate_folder_name(name)
         if ! /^[\w\-. ]+$/m.match?(name)
             abort "Book title #{name} not valid."
-            
         end
         return true
     end
@@ -28,7 +27,6 @@ class Validator
     def validate_file_name(name)
         if ! /^[\w\-. ]+$/m.match?(name) or name.include? "\n"
             abort "Title #{name} not valid."
-            
         end
 
         if File.extname(name) != ".rn"

@@ -3,6 +3,8 @@ module RN
     module Books
       require 'rn/validator'
       class Create < Dry::CLI::Command
+        require 'rn/book'
+
         desc 'Create a book'
 
         argument :name, required: true, desc: 'Name of the book'
@@ -17,11 +19,9 @@ module RN
           Validator::new.validate_folder_name(name)
           path = File.join(Dir.home,".my_rns",name)
           if Validator::new.book_exists?(path)
-            puts "There is already a book with the name #{name}"
-          else
-            Dir.mkdir(path)
-            puts "The new book #{name} has been created under #{File.join(Dir.home, ".my_rns", name)}"
+            abort  "There is already a book with the name #{name}"
           end
+          puts Book.new(name).save
         end
       end
 
@@ -40,25 +40,12 @@ module RN
         def call(name: nil, **options)
           global = options[:global]
           if (name.nil? && !global)
-            puts "No book will be deleted."
-            
+            abort "No book will be deleted."
           end
-
-          if (not name.nil?)
-            dir_to_delete = Validator::new.get_path(name)
-            if (Validator::new.book_exists?(dir_to_delete))
-              Dir.each_child(dir_to_delete) {|x| File.delete(File.join(dir_to_delete,x)) }
-              Dir.rmdir(dir_to_delete)
-              puts "'#{name}' book succesfully deleted."
-            else
-              puts "The Book '#{name}' does not exists."
-            end
-          else
-            if Dir.exist? Validator::new.get_path("global")
-              Dir.each_child(File.join(path,"global")) {|x| puts x;File.delete(x) }
-              puts "'global' book succesfully deleted."
-            end
+          if name.nil? 
+            name = 'global'
           end
+          puts Book.new(name).delete
         end
       end
 
@@ -70,10 +57,7 @@ module RN
         ]
 
         def call(*)
-          
-          path = File.join(Dir.home,".my_rns","/*") 
-          dirs =  Dir[path].select { |entry| File.directory?(entry) }
-          dirs.each { |name| puts File.basename(name)}
+          Book.all.each { |name| puts name }
         end
       end
 
@@ -95,14 +79,12 @@ module RN
           if Validator::new.validate_folder_name(old_name) and Validator::new.validate_folder_name(new_name)
             if Validator::new.book_exists?(old_path) 
               if !Validator::new.book_exists?(new_path)
-                File.rename(old_path, new_path)
+                puts Book.rename(old_name, new_name)
               else
                 abort "A book named '#{new_name}' already exists."
-                
               end
             else
               abort "A book named '#{old_name}' does not exists."
-              
             end
           end
         end
