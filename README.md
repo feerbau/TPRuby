@@ -25,6 +25,10 @@ Para el desarrollo de la aplicacion "Ruby Notes" se tuvieron en cuenta estos cri
 
 - Para el renombre o creacion de una nota con un nombre existente dentro del cuaderno en la que se cree o renombre, se le advertira al usuario de que ya existe una nota con ese nombre. No dejandole sobrescribir dicha nota.
 
+- Para la exportacion de notas se utilizo "redcarpet", y la exportacion de las notas será en formato HTML.
+
+- No se permite modificar el nombre del cuaderno global.
+
 ## Uso de `rn`
 
 Para ejecutar el comando principal de la herramienta se utiliza el script `bin/rn`, el cual
