@@ -2,8 +2,8 @@ module RN
   module Commands
     module Books
       require 'rn/validator'
+      require 'rn/book'
       class Create < Dry::CLI::Command
-        require 'rn/book'
 
         desc 'Create a book'
 

@@ -57,7 +57,7 @@ module RN
 
     def save
       Dir.mkdir(get_path(self.name))
-      "The new book #{self.name} has been created under #{"#{root_path}/#{self.name}"}"
+      "The new book #{self.name} has been created"
     end
 
     def delete

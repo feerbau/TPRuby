@@ -17,6 +17,12 @@ class Validator
         end
     end
 
+    def validate_export
+        unless Dir.exist?(File.join(Dir.home, "/RubyNotes"))
+            Dir.mkdir(File.join(Dir.home, "/RubyNotes"))
+        end
+    end
+
     def validate_folder_name(name)
         if ! /^[\w\-. ]+$/m.match?(name)
             abort "Book title #{name} not valid."

@@ -2,6 +2,7 @@ module RN
   module Commands
     module Notes
       require 'rn/validator'
+      require 'rn/note'
       class Create < Dry::CLI::Command
         desc 'Create a note'
 
@@ -16,27 +17,10 @@ module RN
         
         def call(title:, **options)
           book = options[:book]
+          Validator::new.validate_global
           title = Validator::new.validate_file_name(title)
 
-          if book.nil?
-            path = File.join(Dir.home,".my_rns","global","/")
-            book = "global"
-            Validator::new.validate_global
-          else
-            Validator::new.validate_folder_name(book)
-            path = File.join(Dir.home,".my_rns",book,"/")
-            
-            if !Validator::new.book_exists?(path)
-              abort "The book '#{book}' does not exists."
-              
-            end
-          end
-
-          if Validator::new.note_exists?(path+title)
-            abort "There is already a note named #{title} in '#{book}' book."
-            
-          end
-          File.new(path+title, "w")
+          puts Note.new(title,book).create
         end
       end
 
@@ -55,31 +39,7 @@ module RN
         def call(title:, **options)
           book = options[:book]
           title = Validator::new.validate_file_name(title)
-          if book.nil? or book.empty?
-            puts "Book will be searched inside global book."
-            Validator::new.validate_global
-            book = "global"
-          end
-          path = File.join(Dir.home, ".my_rns", book)
-
-          if !Validator::new.book_exists?(path)
-            abort "The book '#{book}' does not exists."
-            
-          end
-
-          if !Validator::new.note_exists?(File.join(path,title)) 
-            abort "There is no note called '#{title}' inside '#{book}' book"
-            
-          end
-          
-          puts "Are you sure you want to delete the note '#{title}' inside '#{book}' book? Type in 'y' to confirm."
-          confirmation = STDIN.gets.chomp
-          if confirmation != 'y'
-            abort "Canceling delete of the note."
-            
-          end
-          File.delete(File.join(path,title))
-          puts "The note '#{title}' has been deleted from '#{book}'"
+          puts Note.new(title,book).delete
         end
       end
 
@@ -98,32 +58,7 @@ module RN
         def call(title:, **options)
           book = options[:book]
           title = Validator::new.validate_file_name(title)
-
-          if book.nil?
-            Validator::new.validate_global  
-            path = File.join(Dir.home,".my_rns","global",title)
-            book = "global"
-          else
-            Validator::new.validate_folder_name(book)
-            path = File.join(Dir.home,".my_rns",book,"/")
-            
-            if !Validator::new.book_exists?(path)
-              abort "The book '#{book}' does not exists."
-              
-            end
-
-            path = File.join(Dir.home,".my_rns",book,title)
-          end
-
-          if !Validator::new.note_exists?(path)
-            abort "There is no note named '#{title}' in '#{book}' book."
-            
-          end
-
-          editor = TTY::Editor.new(prompt: "Which one do you fancy?")
-          editor.open(path)
-
-          puts "Note succesfully edited."
+          puts Note.new(title,book).edit
         end
       end
 
@@ -142,29 +77,10 @@ module RN
 
         def call(old_title:, new_title:, **options)
           book = options[:book]
-          path = File.join(Dir.home,".my_rns")
+          Validator::new.validate_global
           old_title = Validator::new.validate_file_name(old_title)
           new_title = Validator::new.validate_file_name(new_title)
-          if book.nil? or book.empty?
-            puts "Book will be searched inside global book."
-            Validator::new.validate_global
-            book = "global"
-          end
-          old_path = File.join(path,book,old_title)
-          new_path = File.join(path,book,new_title)
-          if Validator::new.note_exists?(old_path) 
-            if !Validator::new.note_exists?(new_path)
-              File.rename(old_path, new_path)
-            else
-              abort "There is already a note named '#{new_title}' inside '#{book}'"
-              
-            end
-          else
-            abort "There is no note called '#{old_title}' inside '#{book}' book"
-            
-          end
-          puts "Note has been renamed from #{old_title} to #{new_title}"
-          
+          puts Note.new(old_title, book).retitle(new_title)
         end
       end
 
@@ -184,30 +100,14 @@ module RN
         def call(**options)
           book = options[:book]
           global = options[:global]
-          path = File.join(Dir.home,".my_rns/*/*.rn")
-          temp = "Listing notes of %{a} "
-          message = temp % {a:"every book"}
-          if !book.nil? and !book.empty? and Validator::new.validate_folder_name(book)
-            if !Validator::new.book_exists?(File.join(Dir.home,'.my_rns',book))
-              abort "That book does not exists."
-              
-            end
-            path = File.join(Dir.home,".my_rns",book,"*.rn")
-            message = temp % {a:"book '#{book}'"}
+          Validator::new.validate_global
+          if !book.nil? and !book.empty?
+            puts Note.list(book)
+          elsif global
+            puts Note.list("global")
+          else 
+            Note.list_all
           end
-
-          if global
-            path = File.join(Dir.home,".my_rns","global/*.rn")
-            message = temp % {a:"global book"}
-            Validator::new.validate_global
-          end
-
-          list_notes(path, message)
-        end
-
-        def list_notes(path, message)
-          puts message
-          Dir[path].each { |a| puts File.basename(a)}
         end
       end
 
@@ -225,29 +125,52 @@ module RN
         
         def call(title:, **options)
           book = options[:book]
-          if !book.nil? and Validator::new.book_exists?(Validator::new.get_path(book))
-            path = path = File.join(Dir.home,".my_rns", book, title)
-          else
-            path = File.join(Dir.home,".my_rns","global", title)
-            Validator::new.validate_global
-          end
-          if Validator::new.note_exists?(path)
-            if !File.empty?(path)
-              table = Terminal::Table.new do |t|
-                t.title = title
-                File.open(path).each do |line|
-                  t.add_row [line] 
-                end
-              end
-              puts table
+          Validator::new.validate_global
+          title = Validator::new.validate_file_name(title)
+          puts Note.new(title, book).show
+        end
+      end
+
+
+      class Export < Dry::CLI::Command
+        desc 'Export notes'
+
+        argument :title, required: false, desc: 'Title of the note'
+        option :book, type: :string, desc: 'Book'
+        option :global, type: :boolean, default: false, desc: 'Global book'
+
+        example [
+                    'todo  --global              # Exports a note titled "todo" from the global book',
+                    '                            # Export every note from all books',
+                    'sample                      # Export "sample" note from global book',
+                    '--global                    # Export every note from global book',
+                    '--book data                 # Export every note from "data" book',
+                    '"sample" --book "My book" # Exports a note titled "sample" from the book "My book"',
+                ]
+
+        def call(title: nil, **options)
+          Validator::new.validate_export
+          book = options[:book]
+          global = options[:global]
+          if !title.nil?
+            title = Validator::new.validate_file_name(title)
+            if !book.nil? && Validator::new.validate_folder_name(book)
+              Note.new(title, book).exportNote
             else
-              puts "The note '#{title}' is empty."
+              Note.new(title).exportNote
             end
           else
-            abort "That note does not exists."
+            if global
+              Note.export_all_notes("global")
+            elsif !book.nil?
+              Note.export_all_notes(book)
+            else
+              Note.export_all_notes
+            end
           end
         end
       end
+
     end
   end
 end
