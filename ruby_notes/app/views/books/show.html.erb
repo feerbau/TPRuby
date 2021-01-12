@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<div class="jumbotron">
+	<h1 class="display-4"><%= @book.title %></h1>
+  	<p class="lead">Notes: <%= @book.notes.count %></p>
+ 	<hr class="my-4">
+</div>
+
+<div class="container ">
+	<div class="row row-cols-1 row-cols-md-4 g-4">
+ 	<% @book.notes.each do |note| %>
+ 	<div class="col">
+	    <div class="card text-dark bg-light mb-3 h-100" style="max-width: 18rem;">
+		  <div class="card-body">
+		    <h5 class="card-title"><%= note.title %></h5>
+		    <p class="card-text"><%= note.content %></p>
+		  </div>
+		  <%= link_to 'Edit', edit_note_path(note.id), class: "btn btn-outline-warning rounded-0 border-0" %>
+		  <div class="card-footer">
+		    <small class="text-muted">Last updated <%= distance_of_time_in_words(note.updated_at, Time.now)
+		    %></small>
+		   </div>
+		</div>
+	</div>
+	<% end %>
+	</div>
+</div>
+
+<%= link_to 'Edit', edit_book_path(@book), class: "btn btn-secondary" %> 
+<%= link_to 'Back', books_path, class: "btn btn-secondary" %>
