@@ -1,9 +1,14 @@
 class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   before_action :update_allowed_parameters, if: :devise_controller?
   before_action :authenticate_user!
+
+  def not_found
+  	raise ActionController::RoutingError.new('Not Found')
+  end
 
   protected
 

@@ -11,27 +11,32 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <!-- <div class="field form-group">
     <%= form.label :book_id %>
-    <%= form.text_field :book_id %>
-  </div>
+    <%= form.text_field :book_id, class:"form-control" %>
+  </div> -->
 
-  <div class="field">
+  <div class="field form-group">
     <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, class:"form-control" %>
   </div>
 
-  <div class="field">
+  <div class="field form-group">
     <%= form.label :content %>
-    <%= form.text_area :content %>
+    <%= form.text_area :content, class:"form-control" %>
   </div>
 
-  <div class="field">
+  <div class="field from-group">
+    <%= form.label :book %>  
+    <%= form.collection_select :book_id, Book.order(:title), :id, :title, {:include_blank => 'Select a book'}, {:class => 'form-select' } %>
+  </div>
+
+  <!-- <div class="field form-group">
     <%= form.label :user_id %>
     <%= form.text_field :user_id %>
-  </div>
+  </div> -->
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit class:"btn btn-secondary"%>
   </div>
 <% end %>

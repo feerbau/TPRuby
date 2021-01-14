@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<%= wicked_pdf_stylesheet_link_tag "application" %>
+</head>
+<body>
+	<div class='pdf-page'>
+		<header class='document-header'>
+        	<h1 class='page-title'>
+          	<%= @note.title %>
+        	</h1>
+        	<hr>
+      	</header>
+		<div class="container">
+			<div class="jumbotron"> 
+				<%= @note.content %>
+					
+			</div>
+		</div>
+		<%= yield %>
+	</div>
+</body>
+</html>

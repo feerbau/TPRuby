@@ -4,7 +4,7 @@
 
 <div class="container">
   <h1>Books</h1>
-<table class="table table-bordered border-danger table-sm">
+<table class="table">
   <thead class="table-dark">
     <tr>
       <th scope="col">Title</th>
@@ -14,13 +14,14 @@
   </thead>
 
   <tbody>
-    <% @books.each do |book| %>
+    <% current_user.books.each do |book| %>
       <tr>
         <th><%= book.title %></th>
         <th><%= book.notes.count %></th>
         <th><%= link_to 'Show', book %></th>
         <th><%= link_to 'Edit', edit_book_path(book) %></th>
         <th><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></th>
+        <th><%= link_to 'Export', export_book_path(book.id) %></th>
       </tr>
     <% end %>
   </tbody>
