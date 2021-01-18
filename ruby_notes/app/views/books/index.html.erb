@@ -1,33 +1,35 @@
 <p id="notice"><%= notice %></p>
 
-
+<div class="jumbotron">
+  <h3>Books</h3>
+    <p class="lead">Total: <%= @books.count%></p>
+  <hr class="my-4">
+  <%= link_to 'New Book', new_book_path, class:"btn btn-secondary" %>
+</div>
 
 <div class="container">
-  <h1>Books</h1>
 <table class="table">
   <thead class="table-dark">
     <tr>
       <th scope="col">Title</th>
-      <th scope="col" colspan="3">Notas</th>
+      <th scope="col" colspan="3">Notes</th>
       <th scope="col" colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% current_user.books.each do |book| %>
+    <% @books.each do |book| %>
       <tr>
         <th><%= book.title %></th>
         <th><%= book.notes.count %></th>
         <th><%= link_to 'Show', book %></th>
         <th><%= link_to 'Edit', edit_book_path(book) %></th>
         <th><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></th>
-        <th><%= link_to 'Export', export_book_path(book.id) %></th>
+        <th><%= link_to 'Export', export_book_path(book.id), target: '_blank' %></th>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New Book', new_book_path, class:"btn btn-secondary" %>
 </div>

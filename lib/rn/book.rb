@@ -27,7 +27,6 @@ module RN
     def self.rename(old_name, new_name)
       if Book.new(old_name).global?
         return "Global book cannot be renamed."
-        #DISENO No le deje cambiar el nombre al cuaderno global.
       end
       File.rename(get_path(old_name), get_path(new_name))
       "The book '#{old_name}' has been renamed to '#{new_name}'"

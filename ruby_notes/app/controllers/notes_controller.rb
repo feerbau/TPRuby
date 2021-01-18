@@ -3,7 +3,7 @@ class NotesController < ApplicationController
 
   # GET /notes
   def index
-    @notes = Note.all
+    @notes = current_user.notes.paginate(page: params.fetch(:page, 1), per_page: params.fetch(:per_page, 10))
   end
 
   # GET /notes/1

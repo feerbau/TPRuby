@@ -28,10 +28,13 @@ class ExportController < ApplicationController
 		book_id = params[:id]
 		if !book_id.nil?
 	    	book = Book.find_by_id(book_id) || not_found
+	    	notes = book.notes
+	    	book_title = book.title
 	    else
-	    	@notes = Notes.where(book: nil).all
+	    	notes = current_user.notes.where(book: nil).all
+	    	book_title = "Global Book"
 	    end
-	    dec_zip(book.notes, book.title)
+	    dec_zip(notes, book_title)
 	end
 
 	def export_all

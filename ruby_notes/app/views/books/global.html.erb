@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<div class="jumbotron">
+  <h3>Global Book</h3>
+    <p class="lead">Notes: <%= @notes.count %></p>
+  <hr class="my-4">
+
+  <%= link_to 'Back', books_path, class: "btn btn-secondary" %>
+</div>
+
+<div class="container ">
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+  <% @notes.order(updated_at: :desc).each do |note| %>
+  <div class="col">
+      <div class="card text-dark bg-light mb-3 h-100" style="max-width: 18rem;">
+        <!-- <div class="card-header"> -->
+        <!-- <div class="tooltip">Hover over me -->
+        <!-- <a href="#" ><i class="d-flex justify-content-end fas fa-file-export mt-3 px-3"></i></a> -->
+        <%= link_to export_note_path(note.id, format: :pdf) , target: '_blank' do %>
+        <i class="d-flex justify-content-end fas fa-file-export mt-3 px-3" data-toggle="tooltip" data-original-title="Export"></i>
+      <% end %>
+        <!-- </div> -->
+      <div class="card-body">
+        <h5 class="card-title"><%= note.title %></h5>
+        <p class="card-text"><%= note.content %></p>
+      </div>
+      <%= link_to 'Edit', edit_note_path(note.id), class: "btn btn-outline-warning rounded-0 border-0" %>
+      <div class="card-footer">
+        <small class="text-muted">Last updated <%= distance_of_time_in_words(note.updated_at, Time.now)
+        %></small>
+       </div>
+    </div>
+  </div>
+  <% end %>
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'top'
+    });
+});
+</script>

@@ -1,9 +1,12 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
 
+
+#raise ActiveRecord::NotFound
+
   # GET /books
   def index
-    @books = Book.all
+    @books = current_user.books
   end
 
   # GET /books/1
@@ -22,6 +25,7 @@ class BooksController < ApplicationController
   # POST /books
   def create
     @book = Book.new(book_params)
+    @book.user = current_user
 
     if @book.save
       redirect_to @book, notice: 'Book was successfully created.'
@@ -45,6 +49,10 @@ class BooksController < ApplicationController
     redirect_to books_url, notice: 'Book was successfully destroyed.'
   end
 
+  def global
+    @notes = get_global_book_notes
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book
@@ -54,5 +62,9 @@ class BooksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def book_params
       params.require(:book).permit(:title)
+    end
+
+    def get_global_book_notes
+      current_user.notes.where(book: nil).all
     end
 end

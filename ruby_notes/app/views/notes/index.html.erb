@@ -1,6 +1,14 @@
+<%= stylesheet_link_tag 'pagination' %>
+
 <p id="notice"><%= notice %></p>
 
-<h1>Notes</h1>
+<div class="jumbotron">
+  <h3>Notes</h3>
+    <p class="lead">Total: <%= current_user.notes.count %></p>
+  <hr class="my-4">
+  <%= link_to 'New Note', new_note_path, class: "btn btn-secondary" %>
+</div>
+
 
 <table class="table">
   <thead class="table-dark">
@@ -13,7 +21,7 @@
   </thead>
 
   <tbody>
-    <% current_user.notes.each do |note| %>
+  <% @notes.each do |note| %>
       <tr>
         <% if !note.book.nil? %>
           <td><%= note.book.title %></td>  
@@ -29,7 +37,8 @@
     <% end %>
   </tbody>
 </table>
-
+<div class="digg_pagination">
+    <%= will_paginate @notes, :container => false %>
+  </div>
 <br>
 
-<%= link_to 'New Note', new_note_path %>

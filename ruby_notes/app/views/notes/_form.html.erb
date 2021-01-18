@@ -28,7 +28,7 @@
 
   <div class="field from-group">
     <%= form.label :book %>  
-    <%= form.collection_select :book_id, Book.order(:title), :id, :title, {:include_blank => 'Select a book'}, {:class => 'form-select' } %>
+    <%= form.collection_select :book_id, current_user.books.order(:title), :id, :title, {:include_blank => 'Select a book'}, {:class => 'form-select' } %>
   </div>
 
   <!-- <div class="field form-group">
