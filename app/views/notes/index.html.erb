@@ -7,6 +7,7 @@
     <p class="lead">Total: <%= current_user.notes.count %></p>
   <hr class="my-4">
   <%= link_to 'New Note', new_note_path, class: "btn btn-secondary" %>
+  <%= link_to 'Export All', export_all_url, class: "btn btn-secondary", target: '_blank' %>
 </div>
 
 
@@ -17,22 +18,20 @@
       <th>Title</th>
       <th>Content</th>
       <th colspan="3"></th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
   <% @notes.each do |note| %>
       <tr>
-        <% if !note.book.nil? %>
-          <td><%= note.book.title %></td>  
-        <% else %>
-          <td>"Global Book"</td>
-        <% end %>
+        <td><%= note.book.title %></td>  
         <td><%= note.title %></td>
         <td><%= note.content %></td>
         <td><%= link_to 'Show', note %></td>
         <td><%= link_to 'Edit', edit_note_path(note) %></td>
         <td><%= link_to 'Delete', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Export', export_note_url(note), target: '_blank' %></td>
       </tr>
     <% end %>
   </tbody>

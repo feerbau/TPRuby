@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   get 'export/index'
-  get 'export_note/:id', to: "export#show", as: 'export_note'
-  get 'export_all', to: "export#export_all"
-  get 'export_book/(:id)', to: "export#export_book", as: 'export_book'
+  # get 'export_all', to: "export#export_all"
+  get 'export_all', to: "notes#export_all"
+  get 'export_book/(:id)', to: "books#export", as: 'export_book'
+  get 'export_note/(:id)', to: "notes#export", as: 'export_note'
   resources :notes
   resources :books
   devise_for :users

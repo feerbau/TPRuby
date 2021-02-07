@@ -53,6 +53,16 @@ class NotesController < ApplicationController
     redirect_to notes_url, notice: 'Note was successfully destroyed.'
   end
 
+  def export
+    @note = Note.find_by_id(params[:id]) or not_found
+    send_data(@note.export, :type => 'application/pdf', :filename => "#{@note.title}.pdf")
+  end
+
+  def export_all
+    binary_data = current_user.export_all
+    send_data(binary_data, :type => 'application/zip', :filename => "RubyNotes.zip")
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_note

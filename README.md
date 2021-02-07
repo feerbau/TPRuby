@@ -17,17 +17,17 @@ decisiones que pueden tener efectos tanto positivos como negativos en el proyect
 
 Para el desarrollo de la aplicacion "Ruby Notes" se tuvieron en cuenta estos criterios de diseño.
 
-- Al momento de querer crear notas en cuadernos inexistentes, en vez de crear el cuaderno con la nueva nota se termina el programa indicando el problema.
+- Cada usuario tendra un cuaderno global ("Global Book") al que se asignaran todas las notas credas en las que no se seleccione un cuaderno al cual pertenzcan.
 
-- La edicion de una nota, para mayor flexibilidad y comodidad se decidió utilizar "tty-editor", esto permite al usuario elegir entre los editores de texto que posea para ver/editar las notas.
+- Las notas se mostrarán por fecha de actualización mas reciente.
 
-- Se utilizó una clase validadora para validar distintas al momento de interactuar tanto con las notas como con los cuadernos.
+- Para la exportacion de notas se utilizo "Wicked PDF", y la exportacion de las notas será en formato PDF.
 
-- Para el renombre o creacion de una nota con un nombre existente dentro del cuaderno en la que se cree o renombre, se le advertira al usuario de que ya existe una nota con ese nombre. No dejandole sobrescribir dicha nota.
-
-- Para la exportacion de notas se utilizo "redcarpet", y la exportacion de las notas será en formato HTML.
+- La exportacion de un cuaderno completo se realizara en un archivo comprimido, con extension .zip. El cual tendra de nombre el titulo del cuaderno y archivos PDF correspondientes a cada nota que contuviera dicho cuaderno.
 
 - No se permite modificar el nombre del cuaderno global.
+
+- No se puede eliminar el cuaderno global, solo se "limpia" eliminando las notas que contenga.
 
 ## Uso de `rn`
 

@@ -12,14 +12,13 @@
 	<div class='pdf-page'>
 		<header class='document-header'>
         	<h1 class='page-title'>
-          	<%= @note.title %>
+          	<%= note.title %>
         	</h1>
-        	<hr>
+        	<hr><hr>
       	</header>
 		<div class="container">
 			<div class="jumbotron"> 
-				<%= @note.content %>
-					
+				<%= note.content %>
 			</div>
 		</div>
 		<%= yield %>

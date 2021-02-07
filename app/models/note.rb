@@ -8,4 +8,11 @@ class Note < ApplicationRecord
   def to_s
   	title
   end
+
+  def export
+  	ac = ActionController::Base.new()
+  	ac.render_to_string :pdf => "#{self.title}.pdf",
+                 :template => 'export/pdf_note.pdf.erb',
+                 :locals => {note: self}
+  end
 end

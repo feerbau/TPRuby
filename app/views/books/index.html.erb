@@ -5,6 +5,7 @@
     <p class="lead">Total: <%= @books.count%></p>
   <hr class="my-4">
   <%= link_to 'New Book', new_book_path, class:"btn btn-secondary" %>
+  <%= link_to 'Export All', export_all_url, class: "btn btn-secondary", target: '_blank' %>
 </div>
 
 <div class="container">

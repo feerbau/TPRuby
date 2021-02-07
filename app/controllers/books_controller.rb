@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :set_book, only: [:show, :edit, :update, :destroy, :export]
 
 
 #raise ActiveRecord::NotFound
@@ -59,6 +59,12 @@ class BooksController < ApplicationController
   def global
     @notes = get_global_book_notes
   end
+
+  # GET /export/1
+  def export
+    send_data(@book.export, :type => 'application/zip', :filename => "#{@book.title}.zip")
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
