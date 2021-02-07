@@ -20,3 +20,8 @@
       background-color: var(--bs-light);
       border-radius: .3rem;  
     }
+
+.no-link {
+	text-decoration: none;
+	color: black;
+}

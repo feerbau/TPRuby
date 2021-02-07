@@ -24,8 +24,10 @@
         <th><%= book.notes.count %></th>
         <th><%= link_to 'Show', book %></th>
         <th><%= link_to 'Edit', edit_book_path(book) %></th>
-        <th><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></th>
+        <th><%= link_to 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' } %></th>
+        <% if book.notes.count > 0 %>
         <th><%= link_to 'Export', export_book_path(book.id), target: '_blank' %></th>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

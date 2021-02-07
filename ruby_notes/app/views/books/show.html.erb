@@ -14,13 +14,16 @@
  	<% @book.notes.order(updated_at: :desc).each do |note| %>
  	<div class="col">
 	    <div class="card text-dark bg-light mb-3 h-100" style="max-width: 18rem;">
-	   		<!-- <div class="card-header"> -->
+	   		<div class="card-header">
 	   		<!-- <div class="tooltip">Hover over me -->
 	   		<!-- <a href="#" ><i class="d-flex justify-content-end fas fa-file-export mt-3 px-3"></i></a> -->
-	   		<%= link_to export_note_path(note.id, format: :pdf) , target: '_blank' do %>
-			  <i class="d-flex justify-content-end fas fa-file-export mt-3 px-3" data-toggle="tooltip" data-original-title="Export"></i>
+	   		<%= link_to note, method: :delete, data: { confirm: 'Are you sure?'}, class: 'no-link' do %>
+	   		<i class="fas fa-trash-alt" title="Delete note"></i>
+	   		<% end %>
+	   		<%= link_to export_note_path(note.id, format: :pdf), class: 'no-link' , target: '_blank' do %>
+			  <i class="fas fa-file-export" title="Export note"></i>
 			<% end %>
-	   		<!-- </div> -->
+	   		</div>
 		  <div class="card-body">
 		    <h5 class="card-title"><%= note.title %></h5>
 		    <p class="card-text"><%= note.content %></p>

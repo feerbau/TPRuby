@@ -23,6 +23,9 @@ class NotesController < ApplicationController
   def create
     @note = Note.new(note_params)
     @note.user = current_user
+    if @note.book.blank?
+      @note.book = current_user.books.where(title: "Global Book").first
+    end
     
     if @note.save
       redirect_to @note, notice: 'Note was successfully created.'
@@ -33,7 +36,11 @@ class NotesController < ApplicationController
 
   # PATCH/PUT /notes/1
   def update
-    if @note.update(note_params)
+    new_values = note_params
+    if new_values[:book_id].blank?
+      new_values[:book_id] = current_user.books.where(title: "Global Book").select("id").first.id
+    end
+    if @note.update(new_values)
       redirect_to @note, notice: 'Note was successfully updated.'
     else
       render :edit

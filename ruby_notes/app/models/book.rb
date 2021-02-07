@@ -8,6 +8,15 @@ class Book < ApplicationRecord
 	def strip_whitespaces
         self.title = if !title.nil? then title.strip end
     end
+
+    def global?
+    	self.title == "Global Book"
+    end
+
+    def delete_all_notes
+    	self.notes.delete(self.notes)
+    	self.save
+    end
     
 	def to_s
 		title

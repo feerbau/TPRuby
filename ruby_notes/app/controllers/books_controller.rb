@@ -11,6 +11,9 @@ class BooksController < ApplicationController
 
   # GET /books/1
   def show
+    if !current_user.books.include? @book
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 
   # GET /books/new
@@ -45,8 +48,12 @@ class BooksController < ApplicationController
 
   # DELETE /books/1
   def destroy
-    @book.destroy
-    redirect_to books_url, notice: 'Book was successfully destroyed.'
+    if @book.global?
+      @book.delete_all_notes
+    else
+      @book.destroy
+    end
+    redirect_to books_url, notice: 'Book was successfully deleted.'
   end
 
   def global
