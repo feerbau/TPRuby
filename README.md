@@ -1,12 +1,7 @@
 # rn
 
-Ruby Notes, o simplemente `rn`, es un gestor de notas concebido como un clon simplificado
+Ruby Notes, o simplemente `rn`, es un gestor de notas web concebido como un clon simplificado
 de la excelente herramienta [TomBoy](https://wiki.gnome.org/Apps/Tomboy).
-
-Este proyecto es simplemente una plantilla para comenzar a implementar la herramienta e
-intenta proveer un punto de partida para el desarrollo, simplificando el _bootstrap_ del
-proyecto que puede ser una tarea que consume mucho tiempo y conlleva la toma de algunas
-decisiones que pueden tener efectos tanto positivos como negativos en el proyecto.
 
 
 ## Decisiones de diseño
@@ -25,26 +20,28 @@ Para el desarrollo de la aplicacion "Ruby Notes" se tuvieron en cuenta estos cri
 
 - No se puede eliminar el cuaderno global, solo se "limpia" eliminando las notas que contenga.
 
+## Configuración inicial
+
+Antes de poder usar la aplicacion hay que configurar la base de datos, para eso hay que ejecutar estos comandos:
+
+```bash
+$ rails db:create
+$ rails db:migrate
+```
+Y opcionalmente, para crear unos datos de prueba se puede ejecutar lo siguiente:
+
+```bash
+$rails db:seed
+```
+Esto creara un usuario de prueba junto con algunas notas y cuadernos.
+
 ## Uso de `rn`
 
-Para ejecutar el comando principal de la herramienta se utiliza el script `bin/rn`, el cual
-puede correrse de las siguientes manera:
+Para ejecutar RUbyNotes podes hacerlo de la siguiente manera:
 
 ```bash
 $ rails s
 ```
-
-Documentar el uso para usuarios finales de la herramienta queda fuera del alcance de esta
-plantilla y **se deja como una tarea para que realices en tu entrega**, pisando el contenido
-de este archivo `README.md` o bien en uno nuevo. Ese archivo deberá contener cualquier
-documentación necesaria para entender el funcionamiento y uso de la herramienta que hayas
-implementado, junto con cualquier decisión de diseño del modelo de datos que consideres
-necesario documentar.
-
-## Desarrollo
-
-Esta sección provee algunos tips para el desarrollo de tu entrega a partir de esta
-plantilla.
 
 ### Instalación de dependencias
 
@@ -64,7 +61,3 @@ $ bundle install
 > ```bash
 > $ gem install bundler
 > ```
-
-Una vez que la instalación de las dependencias sea exitosa (esto deberías hacerlo solamente
-cuando estés comenzando con la utilización del proyecto), podés comenzar a probar la
-herramienta y a desarrollar tu entrega.
