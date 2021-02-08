@@ -17,26 +17,11 @@
       <ul class="navbar-nav">
       <!-- Icons -->
       <!-- Icon dropdown -->
-        <li class="nav-item me-3 me-lg-0 dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="profileDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i class="fas fa-user"></i>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="profileDropdown">
-            <li><%= link_to 'Profile', edit_user_registration_path, class:"dropdown-item" %></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <%= link_to "Sign out", destroy_user_session_path, :method => :delete, class: 'dropdown-item' %>
-            </li>
-        </ul>
-        </li>
+        <li><%= link_to 'Profile', edit_user_registration_path, class:"nav-link" %></li>
+          <li>
+            <%= link_to "Sign out", destroy_user_session_path, :method => :delete, class: 'nav-link' %>
+          </li>
+      </ul>
       </ul>
     </div>
     <% end %>

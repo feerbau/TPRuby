@@ -31,7 +31,7 @@ $ rails db:migrate
 Y opcionalmente, para crear unos datos de prueba se puede ejecutar lo siguiente:
 
 ```bash
-$rails db:seed
+$ rails db:seed
 ```
 Esto creara un usuario de prueba junto con algunas notas y cuadernos.
 
