@@ -11,21 +11,4 @@ class User < ApplicationRecord
 	def create_account
 	  self.books.create(title: "Global Book")
 	end
-
-  def export_all
-    stringio = Zip::OutputStream.write_buffer do |zio|
-        self.notes.each do |n|
-          pdf = n.export
-          zio.put_next_entry("#{n.title} - from book '#{n.book.title}'.pdf")
-          zio << pdf
-        end
-      # This is needed because we are at the end of the stream and 
-      # will send zero bytes otherwise
-    end
-    stringio.rewind
-    #just using variable assignment for clarity here
-    binary_data = stringio.sysread
-    # binary_data
-    
-  end
 end

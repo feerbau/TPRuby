@@ -60,10 +60,6 @@ class BooksController < ApplicationController
     @notes = get_global_book_notes
   end
 
-  # GET /export/1
-  def export
-    send_data(@book.export, :type => 'application/zip', :filename => "#{@book.title}.zip")
-  end
 
 
   private
